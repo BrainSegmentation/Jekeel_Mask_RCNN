@@ -65,46 +65,94 @@ DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
 
 # Results directory
 # Save submission files here
-RESULTS_DIR = os.path.join(ROOT_DIR, "results/nucleus/")
+RESULTS_DIR = os.path.join(ROOT_DIR, "results/brainseg/")
 
 # The dataset doesn't have a standard train/val split, so I picked
 # a variety of images to surve as a validation set.
+
 VAL_IMAGE_IDS = [
-"artif_0_crop17",
-"artif_0_crop32",
-"artif_1_crop13",
-"artif_2_crop47",
-"artif_3_crop38",
-"artif_5_crop22",
-"artif_6_crop43",
-"artif_7_crop36",
-"artif_8_crop25",
-"artif_10_crop28",
-"artif_12_crop48",
-"artif_19_crop36",
-"artif2_1_crop28",
-"artif2_2_crop36",
-"artif2_4_crop7",
-"artif2_5_crop59",
-"artif2_8_crop33",
-"artif2_11_crop53",
-"artif2_13_crop35",
-"artif2_15_crop11",
-"artif2_16_crop54",
-"artif2_18_crop27",
-"artif2_19_crop57",
-"artif3_5_crop29",
-"artif3_17_crop29",
-"artif3_14_crop23",
-"wafer1_crop33",
-"wafer1_crop45",
-"wafer1_crop57",
-"wafer2_crop29",
-"wafer2_crop34",
+"artif1_0_crop2",
+"artif1_3_crop2",
+"artif1_4_crop2",
+"artif1_5_crop2",
+"artif1_6_crop2",
+"artif1_8_crop2",
+"artif1_10_crop2",
+"artif1_11_crop2",
+"artif1_12_crop2",
+"artif1_13_crop2",
+"artif1_14_crop3",
+"artif1_15_crop2",
+"artif1_17_crop2",
+"artif1_19_crop2",
+"artif1_21_crop2",
+"artif1_23_crop2",
+"artif1_24_crop2",
+"artif1_25_crop2",
+"artif1_26_crop2",
+"artif2_0_crop2",
+"artif2_3_crop2",
+"artif2_4_crop2",
+"artif2_5_crop2",
+"artif2_6_crop2",
+"artif2_8_crop2",
+"artif2_10_crop2",
+"artif2_11_crop2",
+"artif2_12_crop2",
+"artif2_13_crop3",
+"artif2_14_crop2",
+"artif2_15_crop2",
+"artif2_17_crop2",
+"artif2_19_crop2",
+"artif2_21_crop2",
+"artif2_23_crop2",
+"artif2_24_crop2",
+"artif2_25_crop2",
+"artif2_26_crop3",
+"artif3_0_crop2",
+"artif3_3_crop3",
+"artif3_4_crop2",
+"artif3_5_crop2",
+"artif3_6_crop2",
+"artif3_8_crop2",
+"artif3_10_crop2",
+"artif3_11_crop2",
+"artif3_12_crop2",
+"artif3_13_crop2",
+"artif3_14_crop2",
+"artif3_15_crop2",
+"artif3_17_crop2",
+"artif3_19_crop2",
+"artif3_21_crop2",
+"wafer1_crop4",
+"wafer1_crop14",
+"wafer1_crop23",
+"wafer1_crop43",
+"wafer1_crop59",
+"wafer1_crop68",
+"wafer1_crop82",
+"wafer1_crop98",
+"wafer2_crop8",
+"wafer2_crop17",
+"wafer2_crop23",
+"wafer2_crop31",
+"wafer2_crop37",
 "wafer2_crop47",
+"wafer2_crop55",
+"wafer2_crop62",
+"wafer2_crop78",
+"wafer2_crop95",
+"wafer3_crop8",
 "wafer3_crop18",
-"wafer3_crop32",
-"wafer3_crop49"]
+"wafer3_crop28",
+"wafer3_crop34",
+"wafer3_crop41",
+"wafer3_crop50",
+"wafer3_crop58",
+"wafer3_crop64",
+"wafer3_crop74",
+"wafer3_crop85",
+"wafer3_crop96"]
 
 
 
@@ -124,12 +172,12 @@ class BrainsegConfig(Config):
     NUM_CLASSES = 1 + 2  # Background + tissue + mag
 
     # Number of training and validation steps per epoch
-    STEPS_PER_EPOCH = (100 - len(VAL_IMAGE_IDS)) // IMAGES_PER_GPU
+    STEPS_PER_EPOCH = (400 - len(VAL_IMAGE_IDS)) // IMAGES_PER_GPU
     VALIDATION_STEPS = max(1, len(VAL_IMAGE_IDS) // IMAGES_PER_GPU)
 
     # Don't exclude based on confidence. Since we have two classes
-    # then 0.5 is the minimum anyway as it picks between nucleus and BG
-    DETECTION_MIN_CONFIDENCE = 0.5
+    # then 0.5 is the minimum anyway as it picks between mag, tissues and BG
+    DETECTION_MIN_CONFIDENCE = 0.90
 
     # Backbone network architecture
     # Supported values are: resnet50, resnet101
@@ -146,8 +194,8 @@ class BrainsegConfig(Config):
     RPN_ANCHOR_SCALES = (16, 32, 64, 128, 256)
 
     # ROIs kept after non-maximum supression (training and inference)
-    POST_NMS_ROIS_TRAINING = 256
-    POST_NMS_ROIS_INFERENCE = 512
+    POST_NMS_ROIS_TRAINING = 512
+    POST_NMS_ROIS_INFERENCE = 1024
 
     # Non-max suppression threshold to filter RPN proposals.
     # You can increase this during training to generate more propsals.
@@ -157,7 +205,7 @@ class BrainsegConfig(Config):
     RPN_TRAIN_ANCHORS_PER_IMAGE = 64
 
     # Image mean (RGB)
-    MEAN_PIXEL = np.array([182])
+    MEAN_PIXEL = np.array([146,146,11])
 
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
@@ -172,10 +220,10 @@ class BrainsegConfig(Config):
     TRAIN_ROIS_PER_IMAGE = 128
 
     # Maximum number of ground truth instances to use in one image
-    MAX_GT_INSTANCES = 200
+    MAX_GT_INSTANCES = 420
 
     # Max number of final detections per image
-    DETECTION_MAX_INSTANCES = 400
+    DETECTION_MAX_INSTANCES = 600
 
 
 class BrainsegInferenceConfig(BrainsegConfig):
@@ -249,21 +297,22 @@ class BrainsegDataset(utils.Dataset):
         for f in next(os.walk(mask_tissue_dir))[2]:
             num_image_tissue = num_image_tissue + 1
             if f.endswith(".tif"):
-                m = skimage.io.imread(os.path.join(mask_tissue_dir, f),as_gray=True).astype(np.bool)
+                #m = skimage.io.imread(os.path.join(mask_tissue_dir, f),as_gray=as_gray).astype(np.bool)
+                m = skimage.io.imread(os.path.join(mask_tissue_dir, f)).astype(np.bool)
                 mask.append(m)
 
         for f in next(os.walk(mask_mag_dir))[2]:
             if f.endswith(".tif"):
-                m = skimage.io.imread(os.path.join(mask_mag_dir, f),as_gray=True).astype(np.bool)
+                #m = skimage.io.imread(os.path.join(mask_mag_dir, f),as_gray=as_gray).astype(np.bool)
+                m = skimage.io.imread(os.path.join(mask_mag_dir, f)).astype(np.bool)
                 mask.append(m)
+
         mask = np.stack(mask, axis=-1)
 
 
 
-        # Return mask, and array of class IDs of each instance. Since we have
-        # one class ID, we return an array of ones
         class_tissue = np.ones([num_image_tissue], dtype=np.int32)
-        class_mag = np.ones([mask_mag.shape[-1]-num_image_tissue], dtype=np.int32) * 2
+        class_mag = np.ones([mask.shape[-1]-num_image_tissue], dtype=np.int32) * 2
 
         labels = np.concatenate((class_tissue,class_mag), axis=-1)
 
@@ -310,17 +359,17 @@ def train(model, dataset_dir, subset):
 
     # If starting from imagenet, train heads only for a bit
     # since they have random weights
-    print("Train network heads")
-    model.train(dataset_train, dataset_val,
-                learning_rate=config.LEARNING_RATE,
-                epochs=4,
-                augmentation=augmentation,
-                layers='heads')
+    #print("Train network heads")
+    #model.train(dataset_train, dataset_val,
+    #            learning_rate=config.LEARNING_RATE,
+    #            epochs=2,
+    #            augmentation=augmentation,
+    #            layers='heads')
 
     print("Train all layers")
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE,
-                epochs=4,
+                epochs=40,
                 augmentation=augmentation,
                 layers='all')
 
@@ -401,8 +450,8 @@ def detect(model, dataset_dir, subset):
     os.makedirs(submit_dir)
 
     # Read dataset
-    dataset = NucleusDataset()
-    dataset.load_nucleus(dataset_dir, subset)
+    dataset = BrainsegDataset()
+    dataset.load_brainseg(dataset_dir, subset)
     dataset.prepare()
     # Load over images
     submission = []
@@ -414,21 +463,20 @@ def detect(model, dataset_dir, subset):
         # Encode image to RLE. Returns a string of multiple lines
         source_id = dataset.image_info[image_id]["id"]
         rle = mask_to_rle(source_id, r["masks"], r["scores"])
-        submission.append(rle)
         # Save image with masks
         visualize.display_instances(
             image, r['rois'], r['masks'], r['class_ids'],
             dataset.class_names, r['scores'],
-            show_bbox=False, show_mask=False,
+            show_bbox=False, show_mask=True,
             title="Predictions")
         plt.savefig("{}/{}.png".format(submit_dir, dataset.image_info[image_id]["id"]))
 
     # Save to csv file
-    submission = "ImageId,EncodedPixels\n" + "\n".join(submission)
-    file_path = os.path.join(submit_dir, "submit.csv")
-    with open(file_path, "w") as f:
-        f.write(submission)
-    print("Saved to ", submit_dir)
+    #submission = "ImageId,EncodedPixels\n" + "\n".join(submission)
+    #file_path = os.path.join(submit_dir, "submit.csv")
+    #with open(file_path, "w") as f:
+    #    f.write(submission)
+    #print("Saved to ", submit_dir)
 
 
 ############################################################
@@ -473,9 +521,9 @@ if __name__ == '__main__':
 
     # Configurations
     if args.command == "train":
-        config = NucleusConfig()
+        config = BrainsegConfig()
     else:
-        config = NucleusInferenceConfig()
+        config = BrainsegInferenceConfig()
     config.display()
 
     # Create model
