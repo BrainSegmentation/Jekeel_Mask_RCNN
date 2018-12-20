@@ -1,3 +1,20 @@
+# Extended implementation of Mask R-CNN for Brain Tissue Detection and Segmentation
+
+This repository is an extension of an original Github repo [Mask_RCNN](https://github.com/matterport/Mask_RCNN) from Matterport Inc. 
+
+Path to our implementation is: [samples/braintissue](https://github.com/BrainSegmentation/Jekeel_Mask_RCNN/tree/master/samples/braintissue).
+
+Files:
+- [brain.py](https://github.com/BrainSegmentation/Jekeel_Mask_RCNN/blob/master/samples/braintissue/brain.py) - Main mask R-CNN Train script on the brain tissue segmentation dataset
+  
+Notebooks explaining steps:
+- [Inspect Brain Tissue Model](https://github.com/BrainSegmentation/Jekeel_Mask_RCNN/blob/master/samples/braintissue/inspect_braintissue_model.ipynb)
+- [Run Brain Tissue Model](https://github.com/BrainSegmentation/Jekeel_Mask_RCNN/blob/master/samples/braintissue/run_braintissue_model.ipynb)
+
+Main result of our training:
+![Instance Segmentation Sample](assets/result_seg.png)
+
+
 # Mask R-CNN for Object Detection and Segmentation
 
 This is an implementation of [Mask R-CNN](https://arxiv.org/abs/1703.06870) on Python 3, Keras, and TensorFlow. The model generates bounding boxes and segmentation masks for each instance of an object in the image. It's based on Feature Pyramid Network (FPN) and a ResNet101 backbone.
@@ -188,8 +205,8 @@ If you use Docker, the code has been verified to work on
     ```bash
     python3 setup.py install
     ``` 
-3. Download pre-trained COCO weights (mask_rcnn_coco.h5) from the [releases page](https://github.com/matterport/Mask_RCNN/releases).
-4. (Optional) To train or test on MS COCO install `pycocotools` from one of these repos. They are forks of the original pycocotools with fixes for Python3 and Windows (the official repo doesn't seem to be active anymore).
+4. Download pre-trained COCO weights (mask_rcnn_coco.h5) from the [releases page](https://github.com/matterport/Mask_RCNN/releases).
+5. (Optional) To train or test on MS COCO install `pycocotools` from one of these repos. They are forks of the original pycocotools with fixes for Python3 and Windows (the official repo doesn't seem to be active anymore).
 
     * Linux: https://github.com/waleedka/coco
     * Windows: https://github.com/philferriere/cocoapi.
